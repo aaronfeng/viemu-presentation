@@ -1,0 +1,210 @@
+* Basic Commands:
+  
+  ESC - insertion to command mode
+  :w  - save
+  :wq - save and close current file
+  :x - save and close current file
+  za - fold or unfold
+  qq - record macro
+  @{char} - fire macro
+  @@ - repeat last macro
+  . - repeat last command
+  sp - split buffer
+  Ctrl-wc - close buffer
+  ~ - toggle case
+  u - undo
+  Ctrl-R - redo
+  >> - indent
+  >{num}{dir} - indent {num} of lines in {dir} direction
+
+* Navigation:
+
+  Basic:
+
+  h - left
+  j - down
+  k - up
+  l - right
+  w - skip a word forward
+  b - skip a word backward
+  ^ - begining of a line
+  $ - end of a line
+  #G - jump to # line
+  Ctrl-f - move forward one screen
+  Ctrl-b - move backward one screen
+  
+  Advanced:
+  
+  * - jump to the first occurance of the word under curosor
+  f{char} - move to first occurance of {char} on current line
+  /{word} - search {word}
+  % - move to matching {, [, (, etc..
+  H - move to highest point of the screen
+  M - move to middle point of the screen
+  L - move to lowest point of the screen
+  zz - center the current line on the screen
+  gg - top of the file
+  G - bottom of the file
+ 
+
+* Insertion:
+
+  Basic:
+  
+  i - insert
+  I - insert at beginning of the line
+  Shift-i - insert at beginning of the line
+  a - append
+  A - append at end of the line
+  o - open new line below and insert
+  O - open a new line above and insert
+
+  * Copy/Paste/Delete
+  
+  Basic:
+
+  x - delete char under cursor 
+  dd - delete line 
+  D - delete line starting from the cursor
+  yy - yank current line
+  Y - yank the whole line (yes, this is weird)
+  p - paste
+  
+  Advanced:
+
+  cc - delete current line and in insertion mode
+  di{char} - delete inner
+  da{char} - delete all
+  ci{char} - change inner
+  ca{char} - change all
+  yi{char} - yank inner
+  ya{char} - yank all
+  
+* Visual Block Mode
+  
+  v - enable or disable line visual block mode 
+  V - highlight whole line
+  Ctr-q - rectangular 
+  shift-i - apply same edit to other selected lines
+  
+  * ViEmu
+  
+  :set list - show tabs and spaces
+  :prb - build current project
+  :bui - build whole solution
+  :erp - previous error
+  :ern - next error
+
+--------------------------
+
+Workshop
+
+* Replace AreEqual to "That" and change "expectedAgreement" to "expectedInterest"
+  - hint: visual mode or macro
+
+   Before:
+
+   Assert.AreEqual(expectedAgreement.Id.Value, actualGridData.RowItems[0].Id);
+   Assert.AreEqual(expectedAgreement.Id.Value, actualCall.Id);
+   Assert.AreEqual(expectedAgreement.Name, actualCall.Name);
+   Assert.AreEqual(expectedAgreement.AgreementType.Name, actualCall.Type);
+   Assert.AreEqual(expectedAgreement.Principal.Name, actualCall.Principal);
+   Assert.AreEqual(expectedAgreement.Counterparty.Name, actualCall.Counterparty);
+   Assert.AreEqual(expectedAgreement.PrincipalManagingLocation.Name, actualCall.PrincipalManagingLocation);
+
+   After:
+
+* Promoting class methods to interface
+  - hint: yf(
+
+  Before:
+
+  public class ServiceFactory {
+    public readonly string BaseUrl = Configuration.V5BaseUrl;
+
+    public ClientBase<IAgreementService> GetAgreementService() {
+      return new AgreementServiceClient("AgreementService", new EndpointAddress(BaseUrl + "AgreementService.svc"));
+    }
+
+    public ClientBase<IAuthenticationService> GetAuthenticationService() {
+      return new AuthenticationServiceClient("AuthenticationService", new EndpointAddress(BaseUrl + "AuthenticationService.svc"));
+    }
+  }
+
+  After:
+
+* Implementing interface
+  - hint: A and .
+
+  Before:
+
+  public interface IReferenceDataRepository {
+    List<LookupMessage> FindAgreementStatusDetails(SessionUser user);
+    List<LookupMessage> FindAgreementResponsibilities(SessionUser user);
+  }
+
+  After:
+
+* Promote inline function call to local variable
+  - hint: y%, noticed y% works with } and ]
+
+  Before:
+
+  if (call.IsNew(movement.Valid()) && call.Eligible()) {
+    ....
+  }
+
+* Update AuthenticationType to ldap
+  - hint: ci"
+
+  Before:
+
+  <appSettings file="user.config">
+    <add key="CustomMappings" value="Algo.Collateral.Core.CustomMappings,Algo.Collateral.Core" />
+    <add key="AuthenticationType" value="appAuth"/>
+  </appSettings>
+
+  After:
+
+* Convert generated class to SQL script 
+  - hint: :nmap c_ <C-A> or :unmap <C-A> in vim
+
+  Before:
+
+  public class OperationNames {
+    public const string ReadDisputeCategory = "op_ReadDisputeCategory"; // 100001
+    public const string EditDisputeCategory = "op_EditDisputeCategory"; // 100002
+    public const string CreateDisputeCategory = "op_CreateDisputeCategory"; // 100003
+    public const string DeleteDisputeCategory = "op_DeleteDisputeCategory"; // 100004
+    public const string ReadImportConfigurations = "op_ReadImportConfigurations"; // 10001
+    public const string DeleteImportConfiguration = "op_DeleteImportConfiguration"; // 10002
+    public const string CreateImportConfiguration = "op_CreateImportConfiguration"; // 10003
+    public const string EditImportConfiguration = "op_EditImportConfiguration"; // 10004
+    public const string PerformImport = "op_PerformImport"; // 10005
+    public const string ReadImportStatus = "op_ReadImportStatus"; // 10006
+    public const string ReadCustomStatements = "op_ReadCustomStatements"; // 110001
+    public const string CreateCustomStatements = "op_CreateCustomStatements"; // 110002
+    public const string EditCustomStatements = "op_EditCustomStatements"; // 110003
+  }
+
+  After:
+  
+  INSERT INTO Operations (
+    [OperationId],
+    [Name],
+    [Description],
+    [RoleId],
+    [CreatedTimestamp],
+    [UpdatedTimestamp],
+    [ConcurrencyVersion]
+  )
+  SELECT 1, 'op_ReadDisputeCategory', NULL, 1, '06-04-2010 13:00:00.000', '06-04-2010 13:00:00.000', 1 UNION
+  SELECT 2, 'op_EditDisputeCategory', NULL, 1, '06-04-2010 13:00:00.000', '06-04-2010 13:00:00.000', 1 UNION
+
+Links:
+
+Why Vim: http://www.viemu.com/a-why-vi-vim.html
+VIM:     http://www.vim.org/
+ViEmu:   http://www.viemu.com/
+ViEmu:   http://www.viemu.com/a_vi_vim_graphical_cheat_sheet_tutorial.html
+ViEmu:   http://www.viemu.com/viemu_doc.html
